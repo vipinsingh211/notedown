@@ -1,0 +1,25 @@
+{
+  "name": "notedown",
+  "version": "1.0.0",
+  "description": "A notes app based on Markdown",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vipinsingh211/notedown.git"
+  },
+  "keywords": [],
+  "author": "vipinsingh211@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vipinsingh211/notedown/issues"
+  },
+  "homepage": "https://github.com/vipinsingh211/notedown#readme",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "helmet": "^4.6.0"
+  }
+}
