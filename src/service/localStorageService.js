@@ -48,6 +48,17 @@ class LocalStorageService {
             });
         });
     }
+
+    noteById(id) {
+        return new Promise((resolve, reject) => {
+            this.#db.all(`SELECT * FROM ${this.#table_name} WHERE id=? LIMIT 1`, [id],
+            (error, rows) => {
+                this.#db.close();
+                if (error) return reject(error);
+                return resolve(rows);
+            });
+        })
+    }
 }
 
 exports.LocalStorageService = LocalStorageService;

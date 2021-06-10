@@ -1,7 +1,14 @@
 const { Router } = require('express');
-const { body } = require('express-validator');
+const { body, param } = require('express-validator');
+const { validate, version } = require('uuid');
 
-const { writeNewNote, getAllNotesList } = require('../controller/localStorageController');
+const { writeNewNote, getAllNotesList, getNoteByID } = require('../controller/localStorageController');
+
+const validIdFormat = async (id) => {
+    if (validate(id) && version(id) === 4)
+        return true;
+    return Promise.reject('Invalid "id"');
+}
 
 const router = new Router();
 
@@ -10,7 +17,7 @@ router.post('/note',
     body('note').isLength({ max: 50000 }),
     writeNewNote);
 
-// router.get('/note/:id', getNoteByID);
+router.get('/note/:id', param('id').custom(validIdFormat), getNoteByID);
 
 router.get('/note/list', getAllNotesList);
 
