@@ -7,11 +7,12 @@ exports.writeNewNote = (req, res) => {
 		return res.status(400).json({ errors: errors.array() });
 	}
 
+    const title = req.body.title;
 	const note = req.body.note;
 	const local_storage = new LocalStorageService();
 
 	local_storage
-		.insertNote(note)
+		.insertNote(title, note)
 		.then((response) => {
 			console.log(response);
 			return res.status(200).json({ message: 'saved' });
@@ -42,7 +43,7 @@ exports.getNoteByID = (req, res) => {
 	if (!errors.isEmpty()) {
 		return res.status(400).json({ errors: errors.array() });
 	}
-    
+
 	const id = req.params.id;
 	const local_storage = new LocalStorageService();
 

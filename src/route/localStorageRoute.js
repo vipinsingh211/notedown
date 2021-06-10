@@ -19,7 +19,7 @@ router.post('/note',
 
 router.get('/note/:id', param('id').custom(validIdFormat), getNoteByID);
 
-router.get('/note/list', getAllNotesList);
+router.get('/note', getAllNotesList);
 
 // router.put('/note/:id', updateNote);
 
