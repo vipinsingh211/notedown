@@ -7,6 +7,6 @@ const port = process.env.APP_PORT;
 app.listen(port, (error) => {
     if (error) throw error;
     const local_storage = new LocalStorageService();
-    local_storage.createTable();
+    local_storage.intiDB();
     console.log(`"notedown" has started at port ${port}`);
 });

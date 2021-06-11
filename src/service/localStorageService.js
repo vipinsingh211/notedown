@@ -11,25 +11,35 @@ class LocalStorageService {
         this.#db = new sqlite3.Database(this.#db_file);
     }
 
-    createTable() {
-        this.#db.run(`CREATE TABLE IF NOT EXISTS ${this.#table_name} (id TEXT NOT NULL, ` +
-            `created_at INTEGER NOT NULL, updated_at INTEGER NOT NULL, title TEXT, note TEXT)`,
-            (error) => {
-                this.#db.close();
-                if (error) throw error;
-            });
+    intiDB() {
+        this.#db.serialize(() => {
+            this.#db
+                .run(`CREATE TABLE IF NOT EXISTS ${this.#table_name} (id TEXT NOT NULL,
+                    created_at INTEGER NOT NULL,
+                    updated_at INTEGER NOT NULL,
+                    title TEXT,
+                    note TEXT,
+                    changelog INTEGER DEFAULT 0)`,
+                    (error) => {
+                        if (error) throw error;
+                    })
+        });
+        this.#db.close((error) => {
+            if (error) throw error;
+        });
     }
 
     insertNote(title, note) {
         const current_time = new Date().getTime();
         
         return new Promise((resolve, reject) => {
-            this.#db.run(`INSERT INTO ${this.#table_name} VALUES (?, ?, ?, ?, ?)`, [
+            this.#db.run(`INSERT INTO ${this.#table_name} VALUES (?, ?, ?, ?, ?, ?)`, [
                 uuidv4(),
                 current_time,
                 current_time,
                 title,
-                note
+                note,
+                0
             ], (error) => {
                 this.#db.close();
                 if (error) return reject(error);

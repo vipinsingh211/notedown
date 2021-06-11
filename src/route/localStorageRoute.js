@@ -17,11 +17,15 @@ router.post('/note',
     body('note').isLength({ max: 50000 }),
     writeNewNote);
 
-router.get('/note/:id', param('id').custom(validIdFormat), getNoteByID);
+router.get('/note/:id',
+    param('id').custom(validIdFormat),
+    getNoteByID);
 
 router.get('/note', getAllNotesList);
 
 // router.put('/note/:id', updateNote);
+
+// router.put('/note/changelog', toggleChangelog);
 
 // router.delete('/note/:id/trash', trashNote);
 
