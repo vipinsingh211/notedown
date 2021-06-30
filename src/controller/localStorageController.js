@@ -7,7 +7,7 @@ exports.writeNewNote = (req, res) => {
 		return res.status(400).json({ errors: errors.array() });
 	}
 
-    const title = req.body.title;
+	const title = req.body.title;
 	const note = req.body.note;
 	const local_storage = new LocalStorageService();
 
@@ -39,7 +39,7 @@ exports.getAllNotesList = (req, res) => {
 };
 
 exports.getNoteByID = (req, res) => {
-    const errors = validationResult(req);
+	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
 		return res.status(400).json({ errors: errors.array() });
 	}
@@ -54,6 +54,28 @@ exports.getNoteByID = (req, res) => {
 			if (response.length === 0)
 				return res.status(404).json({ message: 'not found' });
 			return res.status(200).json({ message: response });
+		})
+		.catch((error) => {
+			console.error(error);
+			return res.status(500).json({ message: 'try again' });
+		});
+};
+
+exports.updateNote = (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ errors: errors.array() });
+	}
+
+	const id = req.body.id;
+	const title = req.body.title;
+	const note = req.body.note;
+	const local_storage = new LocalStorageService();
+
+	local_storage
+		.updateNote(id, title, note)
+		.then((response) => {
+			return res.status(200).json({ message: 'saved' });
 		})
 		.catch((error) => {
 			console.error(error);
