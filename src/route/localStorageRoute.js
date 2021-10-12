@@ -7,6 +7,7 @@ const {
 	getAllNotesList,
 	getNoteByID,
 	updateNote,
+	deleteNote,
 } = require('../controller/localStorageController');
 
 const validIdFormat = async (id) => {
@@ -14,9 +15,10 @@ const validIdFormat = async (id) => {
 	return Promise.reject('Invalid "id"');
 };
 
-const router = new Router();
 const MAX_TITLE_LEN = 500;
 const MAX_NOTE_LEN = 50000;
+
+const router = new Router();
 router.post(
 	'/note',
 	body('title').isLength({ max: MAX_TITLE_LEN }),
@@ -36,12 +38,6 @@ router.put(
 	updateNote
 );
 
-// router.put('/note/changelog', toggleChangelog);
-
-// router.delete('/note/:id/trash', trashNote);
-
-// router.delete('/note/:id/archive', archiveNote);
-
-// router.delete('/note/:id/delete', deleteNote);
+router.delete('/note/:id', param('id').custom(validIdFormat), deleteNote);
 
 exports.localStorage = router;

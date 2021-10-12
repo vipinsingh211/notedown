@@ -82,3 +82,12 @@ exports.updateNote = (req, res) => {
 			return res.status(500).json({ message: 'try again' });
 		});
 };
+
+exports.deleteNote = (req, res) => {
+	const errors = validationResult(req);
+	if (!errors.isEmpty()) {
+		return res.status(400).json({ errors: errors.array() });
+	}
+
+	const id = req.body.id;
+};

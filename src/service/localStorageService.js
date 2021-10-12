@@ -1,97 +1,80 @@
-const sqlite3 = require('sqlite3').verbose();
-const _dotenv = require('dotenv');
 const { v4: uuidv4 } = require('uuid');
+const l = require('lodash');
+const { DBService } = require('./dbService');
 
-class LocalStorageService {
-	#db_file = process.env.DB_PATH;
+class LocalStorageService extends DBService {
 	#table_name = 'note';
-	#db;
+	#note_table_fields = [
+		'id TEXT NOT NULL',
+		'created_at INTEGER NOT NULL',
+		'updated_at INTEGER NOT NULL',
+		'title TEXT',
+		'note TEXT',
+		'is_deleted INTEGER DEFAULT 0',
+		'changelog INTEGER DEFAULT 0',
+	];
 
 	constructor() {
-		this.#db = new sqlite3.Database(this.#db_file);
+		super();
 	}
 
 	intiDB() {
-		this.#db.serialize(() => {
-			this.#db.run(
-				`CREATE TABLE IF NOT EXISTS ${
-					this.#table_name
-				} (id TEXT NOT NULL,
-                    created_at INTEGER NOT NULL,
-                    updated_at INTEGER NOT NULL,
-                    title TEXT,
-                    note TEXT,
-                    changelog INTEGER DEFAULT 0)`,
-				(error) => {
-					if (error) throw error;
-				}
-			);
-		});
-		this.#db.close((error) => {
-			if (error) throw error;
-		});
+		const values = {
+			table: this.#table_name,
+			fields: this.#note_table_fields.join(', '),
+		};
+		const query = l.template(
+			'CREATE TABLE IF NOT EXISTS ${table} (${fields})'
+		)(values);
+		this.createTable(query);
 	}
 
 	insertNote(title, note) {
 		const current_time = new Date().getTime();
-
-		return new Promise((resolve, reject) => {
-			this.#db.run(
-				`INSERT INTO ${this.#table_name} VALUES (?, ?, ?, ?, ?, ?)`,
-				[uuidv4(), current_time, current_time, title, note, 0],
-				(error) => {
-					this.#db.close();
-					if (error) return reject(error);
-					return resolve(true);
-				}
-			);
-		});
+		const query = `INSERT INTO ${
+			this.#table_name
+		} VALUES (?, ?, ?, ?, ?, ?, ?)`;
+		const values = [
+			uuidv4(),
+			current_time,
+			current_time,
+			title,
+			note,
+			0,
+			0,
+		];
+		return this.executeQuery(query, values);
 	}
 
 	notesList() {
-		return new Promise((resolve, reject) => {
-			this.#db.all(
-				`SELECT id, created_at, updated_at, title FROM ${
-					this.#table_name
-				}`,
-				(error, rows) => {
-					this.#db.close();
-					if (error) return reject(error);
-					return resolve(rows);
-				}
-			);
-		});
+		const query = `SELECT id, created_at, updated_at, title FROM ${
+			this.#table_name
+		}`;
+		return this.readQuery(query);
 	}
 
 	noteById(id) {
-		return new Promise((resolve, reject) => {
-			this.#db.all(
-				`SELECT * FROM ${this.#table_name} WHERE id=? LIMIT 1`,
-				[id],
-				(error, rows) => {
-					this.#db.close();
-					if (error) return reject(error);
-					return resolve(rows);
-				}
-			);
-		});
+		const query = `SELECT * FROM ${this.#table_name} WHERE id=? LIMIT 1`;
+		const values = [id];
+		return this.readQuery(query);
 	}
 
 	updateNote(id, title, note) {
 		const current_time = new Date().getTime();
+		const query = `UPDATE ${
+			this.#table_name
+		} SET updated_at=?, title=?, note=? WHERE id=?`;
+		const values = [current_time, title, note, id];
+		return this.executeQuery(query, values);
+	}
 
-		return new Promise((resolve, reject) => {
-			this.#db.run(
-				`UPDATE ${
-					this.#table_name
-				} SET updated_at=?, title=?, note=? WHERE id=?`,
-				[current_time, title, note, id],
-				(error) => {
-					if (error) return reject(error);
-					return resolve(true);
-				}
-			);
-		});
+	deleteNote(id) {
+		const current_time = new Date().getTime();
+		const query = `UPDATE ${
+			this.#table_name
+		} SET updated_at=?, is_deleted=? WHERE id=?`;
+		const values = [current_time, 1, id];
+		return this.executeQuery(query, values);
 	}
 }
 
