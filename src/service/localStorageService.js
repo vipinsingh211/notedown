@@ -1,9 +1,9 @@
-const { v4: uuidv4 } = require('uuid');
-const l = require('lodash');
-const { DBService } = require('./dbService');
+import { v4 as uuidv4 } from 'uuid';
+import _ from 'lodash/';
+import { SqliteService } from './sqliteService';
 
-class LocalStorageService extends DBService {
-	#table_name = 'note';
+export class LocalStorageService extends SqliteService {
+	#TABLE_NAME = 'note';
 	#note_table_fields = [
 		'id TEXT NOT NULL',
 		'created_at INTEGER NOT NULL',
@@ -14,16 +14,12 @@ class LocalStorageService extends DBService {
 		'changelog INTEGER DEFAULT 0',
 	];
 
-	constructor() {
-		super();
-	}
-
 	intiDB() {
 		const values = {
-			table: this.#table_name,
+			table: this.#TABLE_NAME,
 			fields: this.#note_table_fields.join(', '),
 		};
-		const query = l.template(
+		const query = _.template(
 			'CREATE TABLE IF NOT EXISTS ${table} (${fields})'
 		)(values);
 		this.createTable(query);
@@ -32,7 +28,7 @@ class LocalStorageService extends DBService {
 	insertNote(title, note) {
 		const current_time = new Date().getTime();
 		const query = `INSERT INTO ${
-			this.#table_name
+			this.#TABLE_NAME
 		} VALUES (?, ?, ?, ?, ?, ?, ?)`;
 		const values = [
 			uuidv4(),
@@ -48,21 +44,21 @@ class LocalStorageService extends DBService {
 
 	notesList() {
 		const query = `SELECT id, created_at, updated_at, title FROM ${
-			this.#table_name
+			this.#TABLE_NAME
 		}`;
 		return this.readQuery(query);
 	}
 
 	noteById(id) {
-		const query = `SELECT * FROM ${this.#table_name} WHERE id=? LIMIT 1`;
+		const query = `SELECT * FROM ${this.#TABLE_NAME} WHERE id=? LIMIT 1`;
 		const values = [id];
-		return this.readQuery(query);
+		return this.readQuery(query, values);
 	}
 
 	updateNote(id, title, note) {
 		const current_time = new Date().getTime();
 		const query = `UPDATE ${
-			this.#table_name
+			this.#TABLE_NAME
 		} SET updated_at=?, title=?, note=? WHERE id=?`;
 		const values = [current_time, title, note, id];
 		return this.executeQuery(query, values);
@@ -71,11 +67,14 @@ class LocalStorageService extends DBService {
 	deleteNote(id) {
 		const current_time = new Date().getTime();
 		const query = `UPDATE ${
-			this.#table_name
+			this.#TABLE_NAME
 		} SET updated_at=?, is_deleted=? WHERE id=?`;
 		const values = [current_time, 1, id];
 		return this.executeQuery(query, values);
 	}
-}
 
-exports.LocalStorageService = LocalStorageService;
+	closeDB() {
+		console.log('closing DB');
+		this.close();
+	}
+}

@@ -1,44 +1,43 @@
-const _dotenv = require('dotenv');
-const sqlite3 = require('sqlite3').verbose();
+import sqlite3 from 'sqlite3';
 
-class DBService {
+sqlite3.verbose();
+
+export class SqliteService {
 	#db_file = process.env.DB_PATH;
 	#db;
 
 	constructor() {
-		this.#db = new sqlite3.Database(this.#db_file);
+		this.#db = new sqlite3.Database(String(this.#db_file));
 	}
 
-	createTable(query) {
+	createTable = (query) => {
 		this.#db.serialize(() => {
 			this.#db.run(query, (error) => {
 				if (error) throw error;
+				console.log('Created the table successfully.');
 			});
-		});
-		this.#db.close((error) => {
-			if (error) throw error;
 		});
 	}
 
-	executeQuery(query, values) {
+	executeQuery = (query, values=[]) => {
 		return new Promise((resolve, reject) => {
 			this.#db.run(query, values, (error) => {
-				this.#db.close();
 				if (error) return reject(error);
 				return resolve(true);
 			});
 		});
 	}
 
-	readQuery(query, values = []) {
+	readQuery = (query, values = []) => {
 		return new Promise((resolve, reject) => {
 			this.#db.all(query, values, (error, rows) => {
-				this.#db.close();
 				if (error) return reject(error);
 				return resolve(rows);
 			});
 		});
 	}
-}
 
-exports.DBService = DBService;
+    close = () => {
+        this.#db.close();
+    }
+}

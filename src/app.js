@@ -1,14 +1,12 @@
-const express = require('express');
-const compression = require('compression');
-const helmet = require('helmet');
+import express from 'express'
+import compression from 'compression'
+import helmet from 'helmet'
 
-const { localStorage } = require('./route/localStorageRoute');
+import { local_storage_router } from './route/localStorageRoute';
 
-const app = express();
+export const app = express();
 app.use(compression());
 app.use(helmet());
 app.use(express.json());
 
-app.use('/local_storage', localStorage);
-
-module.exports = app;
+app.use('/local_storage', local_storage_router);
