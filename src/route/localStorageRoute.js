@@ -4,10 +4,10 @@ import { validate, version } from 'uuid';
 
 import {
 	writeNewNote,
-	getNoteByID,
+	getNote,
 	updateNote,
 	deleteNote,
-	getAllNotesList
+	getNotes,
 } from '../controller/localStorageController';
 import { requestValidation } from '../middleware/requestValidationMiddleware';
 
@@ -32,10 +32,10 @@ router.get(
 	'/note/:id',
 	param('id').custom(validIdFormat),
 	requestValidation,
-	getNoteByID
+	getNote
 );
 
-router.get('/note', getAllNotesList);
+router.get('/note', getNotes);
 
 router.put(
 	'/note',

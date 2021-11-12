@@ -1,7 +1,7 @@
 import {
 	insertNote,
-	notesList,
-	noteById,
+	getNotesList,
+	getNoteById,
 	updateNoteById,
 	deleteNoteById,
 } from '../service/localStorageService';
@@ -21,8 +21,8 @@ export const writeNewNote = (req, res) => {
 		});
 };
 
-export const getAllNotesList = (req, res) => {
-	notesList()
+export const getNotes = (req, res) => {
+	getNotesList()
 		.then((response) => {
 			return res.status(200).json({ message: response });
 		})
@@ -32,10 +32,10 @@ export const getAllNotesList = (req, res) => {
 		});
 };
 
-export const getNoteByID = (req, res) => {
+export const getNote = (req, res) => {
 	const id = req.params.id;
 
-	noteById(id)
+	getNoteById(id)
 		.then((response) => {
 			if (response.length === 0)
 				return res.status(404).json({ message: 'not found' });

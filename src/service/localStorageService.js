@@ -32,12 +32,12 @@ export const insertNote = (title, note) => {
 	return executeQuery(query, values);
 };
 
-export const notesList = () => {
+export const getNotesList = () => {
 	const query = `SELECT id, created_at, updated_at, title FROM ${TABLE_NAME}`;
 	return readQuery(query);
 };
 
-export const noteById = (id) => {
+export const getNoteById = (id) => {
 	const query = `SELECT * FROM ${TABLE_NAME} WHERE id=? LIMIT 1`;
 	const values = [id];
 	return readQuery(query, values);
