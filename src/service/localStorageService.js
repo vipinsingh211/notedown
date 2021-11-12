@@ -33,7 +33,7 @@ export const insertNote = (title, note) => {
 };
 
 export const getNotesList = () => {
-	const query = `SELECT id, created_at, updated_at, title FROM ${TABLE_NAME}`;
+	const query = `SELECT id, created_at, updated_at, title FROM ${TABLE_NAME} WHERE is_deleted=0`;
 	return readQuery(query);
 };
 
@@ -52,7 +52,7 @@ export const updateNoteById = (id, title, note) => {
 
 export const deleteNoteById = (id) => {
 	const current_time = new Date().getTime();
-	const query = `UPDATE ${TABLE_NAME} SET updated_at=?, is_deleted=? WHERE id=? LIMIT 1`;
+	const query = `UPDATE ${TABLE_NAME} SET updated_at=?, is_deleted=? WHERE id=?`;
 	const values = [current_time, 1, id];
 	return executeQuery(query, values);
 };
