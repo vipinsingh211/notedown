@@ -1,8 +1,15 @@
-import Router from 'express'
-import { body, param } from 'express-validator'
-import { validate, version } from 'uuid'
+import Router from 'express';
+import { body, param } from 'express-validator';
+import { validate, version } from 'uuid';
 
-import { LocalStorageController } from '../controller/localStorageController'
+import {
+	writeNewNote,
+	getNoteByID,
+	updateNote,
+	deleteNote,
+	getAllNotesList
+} from '../controller/localStorageController';
+import { requestValidation } from '../middleware/requestValidationMiddleware';
 
 const validIdFormat = async (id) => {
 	if (validate(id) && version(id) === 4) return true;
@@ -12,36 +19,38 @@ const validIdFormat = async (id) => {
 const MAX_TITLE_LEN = 500;
 const MAX_NOTE_LEN = 50000;
 
-const localStorageController = new LocalStorageController();
-
 let router = new Router();
 router.post(
 	'/note',
 	body('title').isLength({ max: MAX_TITLE_LEN }),
 	body('note').isLength({ max: MAX_NOTE_LEN }),
-	localStorageController.writeNewNote
+	requestValidation,
+	writeNewNote
 );
 
 router.get(
 	'/note/:id',
 	param('id').custom(validIdFormat),
-	localStorageController.getNoteByID
+	requestValidation,
+	getNoteByID
 );
 
-router.get('/note', localStorageController.getAllNotesList);
+router.get('/note', getAllNotesList);
 
 router.put(
 	'/note',
 	body('id').custom(validIdFormat),
 	body('title').isLength({ max: MAX_TITLE_LEN }),
 	body('note').isLength({ max: MAX_NOTE_LEN }),
-	localStorageController.updateNote
+	requestValidation,
+	updateNote
 );
 
 router.delete(
 	'/note/:id',
 	param('id').custom(validIdFormat),
-	localStorageController.deleteNote
+	requestValidation,
+	deleteNote
 );
 
 export const local_storage_router = router;

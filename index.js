@@ -1,14 +1,13 @@
 import { app } from './src/app'
 import * as _dotenv from 'dotenv'
-import { LocalStorageService } from './src/service/localStorageService'
+import { closeDB, intiDB } from './src/service/localStorageService'
 
 _dotenv.config();
 
 const port = process.env.APP_PORT;
-const local_storage = new LocalStorageService();
 
 const closeServer = (server) => {
-    local_storage.closeDB();
+    closeDB();
     server.close((err) => {
         console.log('server closed');
         let exit_code = 0;
@@ -19,7 +18,7 @@ const closeServer = (server) => {
 
 const server = app.listen(port, (error) => {
     if (error) throw error;
-    local_storage.intiDB();
+    intiDB();
     console.log(`"notedown" has started at port ${port}`);
 });
 

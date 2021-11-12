@@ -1,93 +1,78 @@
-import { LocalStorageService } from '../service/localStorageService'
-import { validationResult } from 'express-validator'
+import {
+	insertNote,
+	notesList,
+	noteById,
+	updateNoteById,
+	deleteNoteById,
+} from '../service/localStorageService';
 
+export const writeNewNote = (req, res) => {
+	const title = req.body.title;
+	const note = req.body.note;
 
-export class LocalStorageController {
-	
-	constructor() {
-		this.local_storage = new LocalStorageService();
-	}
+	insertNote(title, note)
+		.then((response) => {
+			console.log(response);
+			return res.status(200).json({ message: 'saved' });
+		})
+		.catch((error) => {
+			console.error(error);
+			return res.status(500).json({ message: 'try again' });
+		});
+};
 
-	writeNewNote = (req, res) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({ errors: errors.array() });
-		}
+export const getAllNotesList = (req, res) => {
+	notesList()
+		.then((response) => {
+			return res.status(200).json({ message: response });
+		})
+		.catch((error) => {
+			console.error(error);
+			return res.status(500).json({ message: 'try again' });
+		});
+};
 
-		const title = req.body.title;
-		const note = req.body.note;
+export const getNoteByID = (req, res) => {
+	const id = req.params.id;
 
-		this.local_storage
-			.insertNote(title, note)
-			.then((response) => {
-				console.log(response);
-				return res.status(200).json({ message: 'saved' });
-			})
-			.catch((error) => {
-				console.error(error);
-				return res.status(500).json({ message: 'try again' });
-			});
-	}
+	noteById(id)
+		.then((response) => {
+			if (response.length === 0)
+				return res.status(404).json({ message: 'not found' });
+			return res.status(200).json({ message: response });
+		})
+		.catch((error) => {
+			console.error(error);
+			return res.status(500).json({ message: 'try again' });
+		});
+};
 
-	getAllNotesList = (req, res) => {
-		this.local_storage
-			.notesList()
-			.then((response) => {
-				return res.status(200).json({ message: response });
-			})
-			.catch((error) => {
-				console.error(error);
-				return res.status(500).json({ message: 'try again' });
-			});
-	}
+export const updateNote = (req, res) => {
+	const id = req.body.id;
+	const title = req.body.title;
+	const note = req.body.note;
 
-	getNoteByID = (req, res) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({ errors: errors.array() });
-		}
+	updateNoteById(id, title, note)
+		.then((response) => {
+			console.log(response);
+			return res.status(200).json({ message: 'saved' });
+		})
+		.catch((error) => {
+			console.error(error);
+			return res.status(500).json({ message: 'try again' });
+		});
+};
 
-		const id = req.params.id;
+export const deleteNote = (req, res) => {
+	const id = req.params.id;
 
-		this.local_storage
-			.noteById(id)
-			.then((response) => {
-				if (response.length === 0)
-					return res.status(404).json({ message: 'not found' });
-				return res.status(200).json({ message: response });
-			})
-			.catch((error) => {
-				console.error(error);
-				return res.status(500).json({ message: 'try again' });
-			});
-	}
-
-	updateNote = (req, res) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({ errors: errors.array() });
-		}
-
-		const id = req.body.id;
-		const title = req.body.title;
-		const note = req.body.note;
-
-		this.local_storage
-			.updateNote(id, title, note)
-			.then((response) => {
-				console.log(response);
-				return res.status(200).json({ message: 'saved' });
-			})
-			.catch((error) => {
-				console.error(error);
-				return res.status(500).json({ message: 'try again' });
-			});
-	}
-
-	deleteNote = (req, res) => {
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			return res.status(400).json({ errors: errors.array() });
-		}
-	}
-}
+	deleteNoteById(id)
+		.then((response) => {
+			console.log(response);
+			return res.status(200).json({ message: 'deleted' });
+		})
+		.catch((error) => {
+			console.error(error);
+			return res.status(500).json({ message: 'try again' });
+		});
+};
