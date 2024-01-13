@@ -1,0 +1,31 @@
+.editor {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+}
+
+.scrollable-div {
+    overflow-y: auto;
+    height: 90vh;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    flex-grow: 1;
+}
+
+.div1 {
+    width: 20%;
+}
+
+.div2 {
+    width: 40%;
+    box-sizing: border-box;
+}
+
+.div3 {
+    width: 40%;
+}
+
+textarea {
+    resize: none;
+}
