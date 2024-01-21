@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('node:path')
+const { createDBFile, setupTables } = require('./setup')
 
 const createWindow = () => {
     const mainWindow = new BrowserWindow({
@@ -11,7 +12,11 @@ const createWindow = () => {
     })
 
     mainWindow.loadFile('index.html')
+    mainWindow.webContents.openDevTools()
 }
+
+createDBFile()
+setupTables()
 
 app.whenReady().then(() => {
     createWindow()

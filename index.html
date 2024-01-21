@@ -7,13 +7,13 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
 
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="node_modules/bootstrap-icons/font/bootstrap-icons.min.css"></script>
-    <script src="node_modules/marked/marked.min.js"></script>
+    <script src="node_modules/markdown-it/dist/markdown-it.min.js"></script>
     <script src="node_modules/dompurify/dist/purify.min.js"></script>
 
     <script src="frontend-js/markdown.js"></script>
 
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="node_modules/highlight.js/scss/default.scss">
     <link rel="stylesheet" href="main.css">
 
     <title>Notedown</title>
@@ -24,7 +24,16 @@
         <div class="col-lg-4"></div>
         <div class="col-lg-4"></div>
         <div class="col-lg-4 text-end">
-            <!-- question mark -->
+            <!-- Add note (plus sign) -->
+            <a href="" title="Create Note" id="create-note">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
+                    viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                </svg>
+            </a>&nbsp;&nbsp;
+
+            <!-- Help (question sign) -->
             <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank" title="Help">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-question-circle" viewBox="0 0 16 16">
