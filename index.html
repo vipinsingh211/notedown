@@ -6,15 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
 
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="node_modules/markdown-it/dist/markdown-it.min.js"></script>
     <script src="node_modules/dompurify/dist/purify.min.js"></script>
 
-    <script src="frontend-js/markdown.js"></script>
-
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="node_modules/highlight.js/scss/default.scss">
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="assets/style/main.css">
 
     <title>Notedown</title>
 </head>
@@ -25,7 +23,7 @@
         <div class="col-lg-4"></div>
         <div class="col-lg-4 text-end">
             <!-- Add note (plus sign) -->
-            <a href="" title="Create Note" id="create-note">
+            <a href="#" title="Create Note" id="create-note-btn" data-bs-toggle="modal" data-bs-target="#newNoteModal">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
                     viewBox="0 0 16 16">
                     <path fill-rule="evenodd"
@@ -46,10 +44,38 @@
     </div>
     <div class="editor">
         <div class="scrollable-div div1">
-
+            <ul class="list-group list-group-flush" id="notes-list">
+            </ul>
         </div>
-        <textarea class="scrollable-div div2" id="editor-space"></textarea>
+        <textarea class="scrollable-div div2" id="editor-space" placeholder="# Title"></textarea>
         <div class="scrollable-div div3" id="render-space"></div>
+    </div>
+
+    <div class="modal" id="newNoteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form class="was-validated" id="create-note-form">
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <input type="text" id="note-title" name="note-title" class="form-control"
+                            placeholder="enter your note's title" required>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="create-note">Submit</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
     </div>
 
     <script src="renderer.js"></script>

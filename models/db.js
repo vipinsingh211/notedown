@@ -10,9 +10,10 @@ function enableForeignKeys(params) {
 function createMetadataTable() {
     const statement = `
     CREATE TABLE IF NOT EXISTS metadata(
-        metadata_id INTEGER PRIMARY KEY,
+        note_id TEXT PRIMARY KEY,
         title TEXT,
-        create_at INTEGER NOT NULL
+        created_at INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL
     )
     `
     return db.prepare(statement)
@@ -21,11 +22,10 @@ function createMetadataTable() {
 function createNotesTable() {
     const statement = `
     CREATE TABLE IF NOT EXISTS note(
-        note_id INTEGER PRIMARY KEY,
         note TEXT,
-        metadata_id INTEGER NOT NULL,
-        FOREIGN KEY (metadata_id) 
-            REFERENCES metadata (metadata_id) 
+        note_id TEXT NOT NULL UNIQUE,
+        FOREIGN KEY (note_id) 
+            REFERENCES metadata (note_id) 
                 ON DELETE CASCADE 
                 ON UPDATE NO ACTION
     )
