@@ -52,6 +52,28 @@ function getNote(uuid) {
     return db.prepare(`SELECT * FROM note WHERE note_id=@uuid LIMIT 1`).get({ uuid: uuid })
 }
 
+/**
+ * @param {UUDI} uuid The note uuid
+ * @param {string} newTitle The new title for the note
+ */
+function editTitle(uuid, newTitle) {
+    const updateTitle = db.prepare(`UPDATE metadata SET title=@title WHERE note_id=@uuid LIMIT 1`)
+    updateTitle.run({
+        title: newTitle,
+        uuid: uuid,
+    })
+}
+
+/**
+ * @param {UUID} uuid 
+ */
+function deleteNote(uuid) {
+    const deleteNote = db.prepare(`DELETE FROM metadata WHERE note_id=@uuid LIMIT 1`)
+    deleteNote.run({ uuid: uuid })
+}
+
 exports.storeNote = storeNote
 exports.listNotes = listNotes
 exports.getNote = getNote
+exports.editTitle = editTitle
+exports.deleteNote = deleteNote

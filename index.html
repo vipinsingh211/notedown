@@ -22,14 +22,33 @@
         <div class="col-lg-4"></div>
         <div class="col-lg-4"></div>
         <div class="col-lg-4 text-end">
+            <!-- Edit note title (pencil sign) -->
+            <button class="btn btn-sm" id="edit-title" title="Edit title" data-bs-toggle="modal"
+            data-bs-target="#editNoteTitleModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" />
+                </svg>
+            </button>
+            <!-- Delete note (bin sign) -->
+            <button class="btn btn-sm" id="delete-note" title="Delete note" data-bs-toggle="modal"
+            data-bs-target="#deleteNoteModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-trash-fill" viewBox="0 0 16 16">
+                    <path
+                        d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                </svg>
+            </button>
             <!-- Add note (plus sign) -->
-            <a href="#" title="Create Note" id="create-note-btn" data-bs-toggle="modal" data-bs-target="#newNoteModal">
+            <button class="btn btn-sm" title="Create Note" id="create-note-btn" data-bs-toggle="modal"
+                data-bs-target="#newNoteModal">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
                     viewBox="0 0 16 16">
                     <path fill-rule="evenodd"
                         d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
                 </svg>
-            </a>&nbsp;&nbsp;
+            </button>
 
             <!-- Help (question sign) -->
             <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank" title="Help">
@@ -63,13 +82,66 @@
                     <!-- Modal body -->
                     <div class="modal-body">
                         <input type="text" id="note-title" name="note-title" class="form-control"
-                            placeholder="enter your note's title" required>
+                            placeholder="enter title" required>
                     </div>
 
                     <!-- Modal footer -->
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" id="create-note">Submit</button>
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editNoteTitleModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit note title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form class="was-validated" id="edit-note-title-form">
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <input type="text" id="edit-note-title" name="edit-note-title" class="form-control"
+                            placeholder="enter new title" required>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="edit-note-button">Submit</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="deleteNoteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form class="was-validated" id="delete-note-form">
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        Are you sure about deleting the selected note?
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="delete-note">Yes</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
                     </div>
                 </form>
 
