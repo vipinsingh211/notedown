@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     displayActiveNote(editorSpace, renderSpace)
 
     listenerListItems(editorSpace, renderSpace)
-    listenerEditTitle()
+    listenerEditTitle(editorSpace, renderSpace)
     listenerDeleteNote(editorSpace, renderSpace)
 })
 
@@ -124,7 +124,11 @@ function unsetActiveNote() {
     activeNoteDetails.title = null
 }
 
-function listenerEditTitle() {
+/**
+ * @param {HTMLElement} editorSpace The textarea element
+ * @param {HTMLElement} renderSpace The markdown div element
+ */
+function listenerEditTitle(editorSpace, renderSpace) {
     const editNoteTitleForm = document.getElementById("edit-note-title-form")
     const editNoteTitleModal = document.getElementById("editNoteTitleModal")
     const editNoteTitleModalBootstrap = new bootstrap.Modal(editNoteTitleModal)
@@ -146,6 +150,7 @@ function listenerEditTitle() {
         if (activeNoteDetails.title !== noteTitle) {
             window.api.editTitle(activeNoteDetails.uuid, noteTitle)
             displayNotesList()
+            listenerListItems(editorSpace, renderSpace)
         }
     })
 }
@@ -161,8 +166,13 @@ function listenerDeleteNote(editorSpace, renderSpace) {
 
     delteNoteForm?.addEventListener("submit", function (e) {
         window.api.deleteNote(activeNoteDetails.uuid)
+        if (activeNoteDetails.uuid) {
+            unsetActiveNote()
+            unsetEditor(editorSpace, renderSpace)
+        }
         displayNotesList()
         displayActiveNote(editorSpace, renderSpace)
+        listenerListItems(editorSpace, renderSpace)
         deleteNoteModalBootstrap.hide()
     })
 }
