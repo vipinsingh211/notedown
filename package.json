@@ -1,6 +1,6 @@
 {
   "name": "Notedown",
-  "version": "1.0.0",
+  "version": "1.0.0-beta",
   "description": "The Markdown based Note app",
   "main": "main.js",
   "scripts": {
