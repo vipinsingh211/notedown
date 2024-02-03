@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const { app, BrowserWindow } = require('electron')
 const path = require('node:path')
 const { createDBFile, setupTables } = require('./setup')
@@ -13,7 +14,7 @@ const createWindow = () => {
     })
 
     mainWindow.loadFile('index.html')
-    mainWindow.webContents.openDevTools()
+    // mainWindow.webContents.openDevTools()
 }
 
 createDBFile()

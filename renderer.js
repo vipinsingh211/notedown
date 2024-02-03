@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const md = markdownit({
     html: true,
     linkify: true,
@@ -155,7 +156,7 @@ class Notedown {
         const deleteNoteModal = document.getElementById("deleteNoteModal")
         const deleteNoteModalBootstrap = new bootstrap.Modal(deleteNoteModal)
 
-        delteNoteForm?.addEventListener("submit", (e) => {
+        delteNoteForm?.addEventListener("submit", () => {
             window.api.deleteNote(this.activeNoteDetails.uuid)
             if (this.activeNoteDetails.uuid) {
                 this.unsetActiveNote()
@@ -198,5 +199,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     const renderSpace = document.getElementById("render-space")
     const notesListId = "notes-list"
 
-    const notedown = new Notedown(editorSpace, renderSpace, notesListId)
+    new Notedown(editorSpace, renderSpace, notesListId)
 })
